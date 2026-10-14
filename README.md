@@ -1,100 +1,74 @@
-# vinext-starter
+<div align="center">
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+# ✨ Jejak Kediri
 
-## Prerequisites
+<img src="https://img.shields.io/badge/Jenius-heritage%20tech-FFB7C5?style=for-the-badge" alt="Jenius heritage tech" />
+<img src="https://img.shields.io/badge/stack-Vinext%20%2B%20React%2019-E8D5FF?style=for-the-badge" alt="Stack" />
+<img src="https://img.shields.io/badge/node-%3E%3D22.13.0-B8E8FC?style=for-the-badge" alt="Node version" />
 
-- Node.js `>=22.13.0`
+**Menyusuri jejak Panjalu hingga Kediri masa kini — museum digital yang ceria, rapi, dan mudah dijelajah.** 🌸
 
-## Quick Start
+[Quickstart](docs/quickstart.md) · [Folder map](docs/folder-map.md) · [Contributing](CONTRIBUTING.md)
+
+</div>
+
+---
+
+## 💖 Tentang proyek
+
+Jejak Kediri adalah situs edukasi dan wisata budaya: linimasa interaktif, peta situs, galeri arsip, layanan (kuis & panduan), plus **KediriPedia** untuk pengalaman baca mendalam.
+
+Tone visual: hangat, feminin-technological (palet Jenius), tetap akurat secara sejarah.
+
+## 🌸 Fitur utama
+
+- Beranda dengan linimasa, peta, dan galeri foto berlisensi jelas
+- Rute `/kediripedia` untuk narasi panjang
+- Opsional: identitas pengunjung via ChatGPT Sign-In (lihat [platform notes](docs/platform-vinext.md))
+- Skema Drizzle siap untuk D1 bila diperlukan
+
+## 🛠 Instalasi
+
+**Prasyarat:** Node.js `>=22.13.0`
 
 ```bash
+git clone https://github.com/drnovia/jejakkediri.git
+cd jejakkediri
 npm install
-npm run dev
-npm run build
 ```
 
-This starter does not use `wrangler.jsonc`.
+## 🚀 Pemakaian
 
-## Included Shape
+| Perintah | Fungsi |
+| --- | --- |
+| `npm run dev` | Server pengembangan lokal |
+| `npm run build` | Verifikasi build Vinext |
+| `npm test` | Build + tes HTML tersaji |
+| `npm run lint` | ESLint |
+| `npm run db:generate` | Generate migrasi Drizzle |
 
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
+Detail langkah demi langkah: [`docs/quickstart.md`](docs/quickstart.md).
 
-## Workspace Auth Headers
+## 📁 Struktur folder
 
-Signed-in visitors receive both `oai-authenticated-user-id` and `oai-authenticated-user-email`. Private Sites require every visitor to sign in; public Sites may also have anonymous visitors, for whom neither header is present.
-
-The user ID is stable for the same user on the same Site and different across Sites. Email and name are intended for display or contact purposes.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const userId = requestHeaders.get("oai-authenticated-user-id");
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
+```text
+app/          → halaman & komponen UI
+public/       → foto & logo (WebP)
+tests/        → tes regresi HTML
+docs/         → dokumentasi tim
+db/           → schema database
 ```
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+Peta lengkap: [`docs/folder-map.md`](docs/folder-map.md).
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+## 🤝 Kontribusi
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+Kami senang menerima PR kecil yang terfokus. Baca [`CONTRIBUTING.md`](CONTRIBUTING.md) untuk alur branch, tes, dan aturan konten arsip.
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
+## 📜 Lisensi
 
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
+MIT — lihat [`LICENSE`](LICENSE).
 
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
+---
 
-## Useful Commands
-
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
-
-## Learn More
-
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+<p align="center"><sub>💫 Dibuat dengan cinta untuk Kediri · Jenius brand family</sub></p>
