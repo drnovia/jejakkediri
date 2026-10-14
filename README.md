@@ -8,7 +8,7 @@
 
 **Menyusuri jejak Panjalu hingga Kediri masa kini — museum digital yang ceria, rapi, dan mudah dijelajah.** 🌸
 
-[Quickstart](docs/quickstart.md) · [Folder map](docs/folder-map.md) · [Contributing](CONTRIBUTING.md)
+[Quickstart](docs/quickstart.md) · [Folder map](docs/folder-map.md) · [Workspace index](docs/monorepo-index.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
@@ -32,7 +32,7 @@ Tone visual: hangat, feminin-technological (palet Jenius), tetap akurat secara s
 **Prasyarat:** Node.js `>=22.13.0`
 
 ```bash
-git clone https://github.com/drnovia/jejakkediri.git
+git clone https://github.com/drnovia/JejakKediri.git
 cd jejakkediri
 npm install
 ```
